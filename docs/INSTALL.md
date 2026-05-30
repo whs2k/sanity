@@ -50,3 +50,26 @@ We need to configure the Pi to accept a connection from the Apple TV on the buil
    ```bash
    python3 device/main.py
    ```
+
+## 5. Machine Learning Setup (macOS / Local Training)
+If you wish to re-train or generate the ML models on a Mac (especially Apple Silicon where pip dependencies like `numba` can fail), follow these steps:
+1. **Install Miniconda**:
+   ```bash
+   brew install --cask miniconda
+   ```
+2. **Create the Conda Environment**:
+   ```bash
+   conda create -n admute python=3.11 -y
+   conda activate admute
+   ```
+3. **Install ML Dependencies via Conda**:
+   ```bash
+   conda install -c conda-forge librosa pydub yt-dlp tensorflow tensorflow-hub numpy scikit-learn -y
+   ```
+4. **Run the Pipeline**:
+   ```bash
+   python ml/curate_data.py --url "<commercial_url>" --label commercial
+   python ml/curate_data.py --url "<show_url>" --label show
+   python ml/train.py
+   python ml/quantize.py
+   ```
