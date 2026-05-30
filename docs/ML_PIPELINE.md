@@ -36,3 +36,16 @@ The Pi runs a loop:
 1. Reads 0.96 seconds of audio from the PulseAudio loopback.
 2. Passes the waveform directly into the TFLite Interpreter.
 3. If output probability > 0.85, mute the output Bluetooth sink. Otherwise, keep Unmuted.
+
+## 7. Initial Training Results (MVP Model)
+The initial MVP model (`admute_yamnet.tflite`) was trained using a custom curated dataset:
+- **Commercial Data**: Avatar Movie Trailer (438 audio chunks).
+- **Show Data**: Big Buck Bunny (1321 audio chunks).
+
+**Results**:
+- **Training Accuracy**: 98.8%
+- **Validation Accuracy**: 96.0%
+- **Original Model Size**: ~20.40 MB
+- **Quantized TFLite Size**: 3.26 MB
+
+This quantized model provides excellent baseline accuracy and is lightweight enough for real-time inference on the Raspberry Pi 4 without audio lag.
