@@ -1,0 +1,4 @@
+pyatv
+pyaudio
+numpy
+tflite-runtime
