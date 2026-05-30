@@ -1,1 +1,4 @@
 RPi.GPIO
+tflite-runtime
+pyaudio
+numpy
