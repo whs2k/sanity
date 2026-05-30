@@ -39,11 +39,14 @@ class AdMuteDevice:
             # 3. Handle Detection
             if prob > 0.80:
                 print(f"[Inference] COMMERCIAL DETECTED! (Confidence: {prob:.2f})")
-                # For Milestone 3, we just toggle the LED to validate detection.
                 self.gpio_controller.turn_on_led()
+                if not self.audio_service.is_muted:
+                    self.audio_service.mute_transmitter()
             else:
                 print(f"[Inference] Show playing. (Commercial Confidence: {prob:.2f})")
                 self.gpio_controller.turn_off_led()
+                if self.audio_service.is_muted:
+                    self.audio_service.unmute_transmitter()
                 
             # Note: We don't need time.sleep here because get_audio_chunk() blocks for 0.96s
             # on the live PyAudio stream. (If using Mock, it will run fast, so we add a tiny sleep)
