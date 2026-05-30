@@ -1,16 +1,24 @@
 # AdMute - Pure Software Setup Guide
 
-Follow these steps to deploy the Wi-Fi-based AdMute software onto a fresh Raspberry Pi.
+Follow these steps to deploy the Wi-Fi-based AdMute software onto a fresh Raspberry Pi (including the Raspberry Pi Zero 2 W).
 
 ## 1. Initializing & Connecting to the Raspberry Pi
 
-1. **Flash OS**: Download the [Raspberry Pi Imager](https://www.raspberrypi.com/software/) on your Mac. Insert your MicroSD card and use the Imager to flash **Raspberry Pi OS (64-bit)**. 
-   - *Pro Tip*: Before clicking "Write", click the gear icon (Advanced Options) in the Imager. Check "Enable SSH", set a username/password (e.g., `pi` / `raspberry`), and configure your Wi-Fi credentials.
-2. **Boot the Pi**: Insert the SD card, plug in the USB microphone, plug in power, and wait 2-3 minutes.
-3. **Log In (SSH)**: On your Mac, open the Terminal and run:
+Because you are using a Raspberry Pi as a "headless" server (without plugging it into a monitor or keyboard), you will connect to it remotely from your Mac using a protocol called SSH (Secure Shell). Here is the exact physical flow:
+
+1. **Download the Imager**: Go to [raspberrypi.com/software/](https://www.raspberrypi.com/software/) on your Mac and download the **Raspberry Pi Imager**.
+2. **Configure the OS**: Insert your MicroSD card into your Mac. Open the Imager, choose **Raspberry Pi OS (64-bit)** (or 32-bit if using a very old Pi), and select your SD card.
+3. **The "Headless" Secret (Crucial Step)**: Before clicking "Write", click the **Edit Settings** button (or gear icon) in the Imager. You must configure three things here:
+   - Check **Enable SSH** (Use password authentication).
+   - Set a **username and password** (e.g., username: `pi`, password: `raspberry`).
+   - Check **Configure wireless LAN** and enter your exact home Wi-Fi name and password. This is what allows the Pi to automatically join your network when it turns on!
+4. **Flash & Insert**: Click "Write". Once finished, take the SD card out of your Mac and insert it into the slot on your Raspberry Pi.
+5. **Boot Up**: Plug the USB microphone and the power cable into the Raspberry Pi. Wait about 2 to 3 minutes. During this time, the Pi is booting up and silently connecting to your home Wi-Fi network using the credentials you provided in Step 3.
+6. **Log In (SSH)**: Now, open the **Terminal** app on your Mac. Type the following command to securely connect to the Pi over your Wi-Fi network:
    ```bash
    ssh pi@raspberrypi.local
    ```
+   *(If you used a username other than `pi` in step 3, replace `pi` with that username). It will ask for your password. When you type it, the characters won't show up on screen—just type it and press Enter! You are now remotely controlling the Raspberry Pi!*
 
 ## 2. Software Installation
 
