@@ -1,6 +1,6 @@
 # AdMute Bill of Materials (BOM)
 
-This document outlines the hardware components required to build the AdMute MVP device. 
+This document outlines the hardware components required to build the AdMute MVP device, utilizing a Dual-Bluetooth architecture.
 
 ## Core Hardware
 | Component | Description | Estimated Cost | Example Link |
@@ -12,7 +12,7 @@ This document outlines the hardware components required to build the AdMute MVP 
 ## Audio Routing & Connectivity
 | Component | Description | Estimated Cost | Example Link |
 | :--- | :--- | :--- | :--- |
-| **3.5mm Aux Audio Cable** | To connect the Raspberry Pi's audio output to the Altec Lansing speaker. | $5.00 | [Amazon](https://www.amazon.com/dp/B00NO73MUQ) |
+| **USB Bluetooth 4.0/5.0 Dongle** | Adds a second Bluetooth radio to the Pi. One radio will receive from the Apple TV, the other will transmit to the HydraMotion. This dual setup prevents bandwidth congestion and lag. | $12.00 | [Amazon](https://www.amazon.com/dp/B0775YF36R) |
 
 ## Prototyping & Control
 | Component | Description | Estimated Cost | Example Link |
@@ -21,9 +21,4 @@ This document outlines the hardware components required to build the AdMute MVP 
 | **Push Button (Momentary)** | To manually toggle the muting/auto-muting features. | $2.00 | [Adafruit](https://www.adafruit.com/product/1009) |
 | **LED (Red/Green) & Resistors** | To signal when a commercial is detected. Includes a 330 ohm resistor. | $3.00 | [Adafruit](https://www.adafruit.com/product/299) |
 
-## Optional (But Recommended)
-| Component | Description | Estimated Cost | Example Link |
-| :--- | :--- | :--- | :--- |
-| **USB Sound Card** | The Pi's built in 3.5mm audio can sometimes be noisy. A cheap USB to 3.5mm adapter improves audio quality. | $8.00 | [Amazon](https://www.amazon.com/dp/B00IRVQ0F8) |
-
-**Estimated Total MVP Cost**: ~$91.00 USD
+**Estimated Total MVP Cost**: ~$90.00 USD

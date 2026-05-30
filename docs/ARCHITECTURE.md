@@ -1,13 +1,13 @@
 # AdMute Architecture & System Flow
 
-The AdMute device sits as a "Man-in-the-Middle" between your Apple TV and your Altec Lansing speaker. By intercepting the audio stream, it can perform real-time Machine Learning inference to detect commercials and mute the output.
+The AdMute device sits as a "Man-in-the-Middle" between your Apple TV and your Altec Lansing HydraMotion speaker. By intercepting the Bluetooth audio stream, it performs real-time Machine Learning inference using YAMNet to detect commercials and disconnects the outgoing audio when one is found.
 
-## Hardware Flow
+## Hardware Flow (Dual-Bluetooth)
 
 ```mermaid
 flowchart LR
     ATV[Apple TV] -->|Bluetooth A2DP| RPI[Raspberry Pi 4]
-    RPI -->|3.5mm Aux Audio| SPK[Altec Lansing Speaker]
+    RPI -->|Bluetooth A2DP| SPK[HydraMotion Speaker]
     
     subgraph AdMute Device
     RPI
@@ -17,35 +17,29 @@ flowchart LR
 ```
 
 ### Flow Description:
-1. **Input**: The Apple TV pairs with the Raspberry Pi. The Pi advertises itself as a Bluetooth Audio Receiver (A2DP Sink).
+1. **Input (Radio 1)**: The Apple TV pairs with the Raspberry Pi's built-in Bluetooth. The Pi advertises itself as a Bluetooth Audio Receiver (A2DP Sink).
 2. **Processing**: Inside the Pi, the incoming audio stream is routed to two places simultaneously:
-   - **Audio Output**: The hardware 3.5mm jack.
-   - **ML Pipeline**: A Python script capturing short chunks (e.g., 1-second rolling windows) of the audio.
-3. **Output**: The Pi connects to the Altec Lansing speaker via a standard 3.5mm Aux cable.
+   - **Audio Output**: A virtual audio sink that routes to the second Bluetooth radio.
+   - **ML Pipeline**: A Python script capturing short chunks of the audio to feed into the YAMNet model.
+3. **Output (Radio 2)**: The Pi connects to the HydraMotion speaker using the USB Bluetooth Dongle (A2DP Source).
 
 ## Software Flow
 
 ```mermaid
 flowchart TD
-    A[Incoming Bluetooth Audio] --> B(Audio Capture Service)
+    A[Incoming Bluetooth Audio] --> B(PulseAudio Null Sink)
     B --> C{Buffer}
     
-    C --> D(Audio Out - ALSA/PulseAudio)
-    C --> E(ML Inference Engine)
+    C --> D(Audio Out - Bluetooth Transmitter)
+    C --> E(YAMNet ML Engine)
     
     E --> F{Is Commercial?}
-    F -- Yes --> G[Trigger Mute via ALSA]
+    F -- Yes --> G[Mute Transmitter Sink]
     F -- Yes --> H[Turn on LED]
     
-    F -- No --> I[Unmute ALSA]
+    F -- No --> I[Unmute Transmitter Sink]
     F -- No --> J[Turn off LED]
-    
-    K((Physical Button)) --> L{Interrupt}
-    L --> M[Toggle Auto-Mute State]
 ```
 
-### Components
-1. **Audio Server (PulseAudio / PipeWire)**: Manages the Bluetooth connection from the Apple TV and the ALSA output to the 3.5mm jack.
-2. **Python Capture Script**: Uses `pyaudio` or `sounddevice` to read the loopback of the incoming audio stream.
-3. **TensorFlow Lite Engine**: Runs the quantized model to output a probability `P(commercial)`.
-4. **GPIO Controller**: A background thread using `RPi.GPIO` to listen for button presses and control the LED.
+### The "Muting Dilemma" Solution
+By muting only the *Transmitter Sink*, the YAMNet ML Engine continues to receive the *Incoming Audio* from the Apple TV even when the HydraMotion speaker is silent. This allows the model to instantly detect when the commercial is over and the regular programming returns, at which point it unmutes the Transmitter Sink.
