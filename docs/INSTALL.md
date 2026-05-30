@@ -2,17 +2,28 @@
 
 This guide covers the setup of the Raspberry Pi hardware, OS configuration, and software installation required for the AdMute MVP using the Dual-Bluetooth architecture.
 
+## 0. Initializing & Connecting to the Raspberry Pi
+Before you can run the AdMute code, you need an operating system on the Raspberry Pi and a way to log into it.
+
+1. **Flash OS**: Download the [Raspberry Pi Imager](https://www.raspberrypi.com/software/) on your Mac. Insert your MicroSD card and use the Imager to flash **Raspberry Pi OS (64-bit)**. 
+   - *Pro Tip*: Before clicking "Write", click the gear icon (Advanced Options) in the Imager. Check "Enable SSH", set a username/password (e.g., `pi` / `raspberry`), and configure your Wi-Fi credentials. This allows a "headless" setup!
+2. **Boot the Pi**: Insert the SD card into the Raspberry Pi, plug in the USB-C power supply, and wait 2-3 minutes for it to boot and connect to Wi-Fi.
+3. **Log In (SSH)**: On your Mac, open the Terminal and run:
+   ```bash
+   ssh pi@raspberrypi.local
+   ```
+   *(If you changed the username, replace `pi` with your username. If this doesn't work, you can plug a monitor and keyboard directly into the Pi instead).*
+
 ## 1. Hardware Assembly
-1. **Prepare the Pi**: Insert the SD card into the Raspberry Pi.
-2. **Add Second Bluetooth Radio**: Plug the USB Bluetooth Dongle into one of the USB ports on the Raspberry Pi.
-3. **Wire the Breadboard**:
-   - **LED**: Connect the long leg (anode) of the LED to GPIO Pin 18. Connect the short leg (cathode) through a 330-ohm resistor to a Ground (GND) pin.
-   - **Button**: Connect one leg of the push button to GPIO Pin 17, and the other leg to a Ground (GND) pin.
-4. **Power On**: Plug in the USB-C power supply.
+1. **Add Second Bluetooth Radio**: Plug the USB Bluetooth Dongle into one of the USB ports on the Raspberry Pi.
+2. **Wire the Breadboard**:
+   - **ML Detection LED**: Connect the long leg to GPIO 18, and the short leg through a 330-ohm resistor to Ground (GND).
+   - **Auto-Mute Status LED**: Connect the long leg to GPIO 22, and the short leg through a resistor to Ground (GND).
+   - **Test Mute Button**: Connect one leg to GPIO 17, the other to Ground (GND).
+   - **Auto-Mute Toggle Button**: Connect one leg to GPIO 27, the other to Ground (GND).
 
 ## 2. OS Installation & Configuration
-1. **Flash OS**: Use the Raspberry Pi Imager to flash **Raspberry Pi OS (64-bit)**.
-2. **System Update**:
+1. **System Update**: Once logged into the Raspberry Pi terminal, run:
    ```bash
    sudo apt update && sudo apt upgrade -y
    ```
